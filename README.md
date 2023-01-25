@@ -2,20 +2,31 @@
 
 ## Overview
 
-The goal of this challenge is to demonstrate your skills as a senior platform engineer by deploying a small Go HTTP server and adding a CI pipeline to this code.
+The goal of this challenge is to demonstrate your skills as a senior platform engineer by deploying the small Go HTTP server in this directory to a cloud environment, following CI/CD and Infrastructure as Code (IaC) practices
 
-## Requirements
+## Application
 
-- The server should be deployed to a public cloud environment (e.g. AWS, GCP, Azure).
-  - You don't actually need to deploy this, you could just have the code in place to do so?
-- The server should be deployed using an Infrastructure-as-Code (IaC) tool (e.g. Terraform, CloudFormation).
-- The server should be deployed using a CI/CD pipeline (e.g. CircleCI, Jenkins, GitHub Actions).
+You will a small HTTP server in the `main.go` file that responds to requests with a HTTP 200 status code and the body "Hello {name}", where {name} can be provided by query string parameter `name`.
 
-## Code
+Additionally, the "Hello" greeting can be changed by providing a `GREETING` ENV var.
 
-You will find the code for the HTTP server in `main.go` file. The code creates a basic HTTP server that responds to requests with a HTTP 200 status code and the body "Hello {name}", where {name} can be provided by query string parameter `name`.
+If you have the golang toolchain installed you can compile this image by:
 
-Additionally, the "Hello" prefix can be changed by providing a `GREETING` ENV var.
+```sh
+# This will generate a `simple-http-server` binary
+go build main.go -o simple-http-server
+./simple-http-server
+```
+
+Alternatively, there are a number of pre-built binaries in the `./releases/` directory.
+
+## Suggested actions
+
+- Dockerise the application
+- Deploy the application to a public cloud environment (e.g. AWS, GCP, Azure).
+- Use an Infrastructure-as-Code (IaC) tool such as terraform to provision the cloud.
+- Configure a CI/CD pipeline (e.g. CircleCI, Jenkins, GitHub Actions).
+- Configure the application to change the greeting.
 
 ## Time Limit
 
