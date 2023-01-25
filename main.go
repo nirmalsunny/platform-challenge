@@ -12,7 +12,11 @@ func main() {
 		if name == "" {
 			name = "World"
 		}
-		fmt.Fprintf(w, "Hello %s", name)
+		greeting := r.URL.Query().Get("greeting")
+		if greeting == "" {
+			greeting = "Hello"
+		}
+		fmt.Fprintf(w, "%s %s", greeting, name)
 	})
 
 	http.ListenAndServe(":8080", nil)
