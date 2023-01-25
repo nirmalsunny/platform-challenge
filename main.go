@@ -8,13 +8,13 @@ import (
 
 func main() {
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		name := os.Getenv("NAME")
-		if name == "" {
-			name = "World"
-		}
-		greeting := r.URL.Query().Get("greeting")
+		greeting := os.Getenv("GREETING")
 		if greeting == "" {
 			greeting = "Hello"
+		}
+		name := r.URL.Query().Get("name")
+		if name == "" {
+			name = "World"
 		}
 		fmt.Fprintf(w, "%s %s", greeting, name)
 	})

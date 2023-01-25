@@ -7,28 +7,25 @@ The goal of this challenge is to demonstrate your skills as a senior platform en
 ## Requirements
 
 - The server should be deployed to a public cloud environment (e.g. AWS, GCP, Azure).
+  - You don't actually need to deploy this, you could just have the code in place to do so?
 - The server should be deployed using an Infrastructure-as-Code (IaC) tool (e.g. Terraform, CloudFormation).
 - The server should be deployed using a CI/CD pipeline (e.g. CircleCI, Jenkins, GitHub Actions).
-- The server should be configured to automatically scale up or down based on incoming traffic.
-- The server should be configured to automatically roll out new versions of the code.
-- The server should be configured to automatically roll back to the previous version of the code if an error occurs.
 
 ## Code
 
-You will find the code for the HTTP server in `main.go` file. The code creates a basic HTTP server that responds to requests with a HTTP 200 status code and the body "Hello {name}", where {name} is a configurable value loaded from an environment variable.
+You will find the code for the HTTP server in `main.go` file. The code creates a basic HTTP server that responds to requests with a HTTP 200 status code and the body "Hello {name}", where {name} can be provided by query string parameter `name`.
+
+Additionally, the "Hello" prefix can be changed by providing a `GREETING` ENV var.
 
 ## Time Limit
 
-The challenge is expected to take no more than two hours to complete.
+You should spend no longer than two hours on this challenge. You may not be able to finish everything you would like inside this timeframe - be ready to explain how you prioritised what you did, and what your next steps would be.
 
 ## Evaluation Criteria
 
-- How well the server is deployed and configured in the chosen cloud environment.
-- How well the server is configured to automatically scale up or down based on incoming traffic.
-- How well the server is configured to automatically roll out new versions of the code.
-- How well the server is configured to automatically roll back to the previous version of the code if an error occurs.
-- The quality and maintainability of the code and infrastructure-as-code.
-- The quality of the documentation and explanations provided.
+- Adherence to Infrastructure-as-Code and CI/CD best practices.
+- Deployed code is nice, but not essential. If you can show us something representative but not 100% working, that's fine. Be ready to discuss how you would make it work.
+- The readability of the submission.
 
 ## Submission
 
