@@ -8,13 +8,16 @@ The goal of this challenge is to demonstrate your skills as a senior platform en
 
 You will a small HTTP server in the `main.go` file that responds to requests with a HTTP 200 status code and the body "Hello {name}", where {name} can be provided by query string parameter `name`.
 
-Additionally, the "Hello" greeting can be changed by providing a `GREETING` ENV var.
+Additionally, the "Hello" greeting can be changed by providing configuration. The HTTP Server allows configuration to be provided via the command line, a configuration file and environment variables.
 
-If you have the golang toolchain installed you can compile this image by:
+If you have the golang toolchain installed you can compile the `simple-http-server` binary via the following command:
 
 ```sh
-# This will generate a `simple-http-server` binary
-go build main.go -o simple-http-server
+go build -o simple-http-server
+```
+
+To run the binary use:
+```sh
 ./simple-http-server
 ```
 
