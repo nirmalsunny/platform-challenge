@@ -16,7 +16,7 @@ jobs:
     steps:
 
     - name: Check out code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
     
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v1
@@ -33,8 +33,8 @@ jobs:
       
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-        ECR_REPOSITORY: $ECR_REPOSITORY_NAME
-        IMAGE_TAG: qqqwwww
+        ECR_REPOSITORY: ${{ vars.ECR_REPOSITORY_NAME }}
+        IMAGE_TAG: dev-image
       run: |
         docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
