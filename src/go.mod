@@ -1,4 +1,4 @@
-module main
+module repos/challenge/platform-engineer-challenge/src
 
 go 1.19
 
