@@ -6,12 +6,10 @@ on:
     branches: [ main ]
 
 jobs:
-  build-and-push-dev:
-    name: Build and Push Image - Dev
+  build-and-push:
+    name: Build and Push Image
     runs-on: ubuntu-latest
-    environment: dev
     steps:
-
     - name: Check out code
       uses: actions/checkout@v3
     
@@ -26,8 +24,8 @@ jobs:
       id: login-ecr
       uses: aws-actions/amazon-ecr-login@v1
 
-    - name: Build, tag, and push image to Amazon ECR
-      
+    - name: Build, tag, and push image to Amazon ECR - dev
+      environment: dev
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         ECR_REPOSITORY: ${{ vars.ECR_REPOSITORY_NAME }}
@@ -35,33 +33,13 @@ jobs:
       run: |
         docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG -t $ECR_REGISTRY/$ECR_REPOSITORY:latest .
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-   
-  build-and-push-prod:
-    name: Build and Push Image - Production
-    runs-on: ubuntu-latest
-    environment: prod   
-    steps:
 
-    - name: Check out code
-      uses: actions/checkout@v3
-    
-    - name: Configure AWS credentials
-      uses: aws-actions/configure-aws-credentials@v1
-      with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: eu-west-2
-
-    - name: Login to Amazon ECR
-      id: login-ecr
-      uses: aws-actions/amazon-ecr-login@v1
-
-    - name: Build, tag, and push image to Amazon ECR
-      
+    - name: Build, tag, and push image to Amazon ECR - prod
+      environment: prod
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         ECR_REPOSITORY: ${{ vars.ECR_REPOSITORY_NAME }}
         IMAGE_TAG: ${{ github.run_id }}
       run: |
-        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG -t $ECR_REGISTRY/$ECR_REPOSITORY:latest .
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
