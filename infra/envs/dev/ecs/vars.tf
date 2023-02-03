@@ -14,17 +14,17 @@ variable "public_subnet_cidr_blocks" {
 }
 
 variable "release_version" {
-  type = string
+  type        = string
   description = "Image version which needs to be deployed"
-  default = ""
+  default     = ""
 }
 
 variable "ecr_repository_name" {
-  type = string
+  type        = string
   description = "The repository name used in ECR"
 }
 
 variable "ecr_url" {
-  type = string
+  type        = string
   description = "The repository url used in ECR"
 }

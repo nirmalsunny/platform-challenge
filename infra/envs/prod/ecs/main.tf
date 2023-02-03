@@ -1,15 +1,15 @@
 module "vpc" {
   source = "../../../modules/vpc"
 
-  env = var.env
+  env                       = var.env
   public_subnet_cidr_blocks = var.public_subnet_cidr_blocks
-  vpc_cidr_block = var.vpc_cidr_block
+  vpc_cidr_block            = var.vpc_cidr_block
 }
 
 resource "aws_ecr_repository" "platform_challenge" {
   name                 = var.ecr_repository_name
   image_tag_mutability = "MUTABLE"
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
+
   image_scanning_configuration {
     scan_on_push = true
   }
@@ -112,8 +112,8 @@ resource "aws_ecs_cluster" "cluster" {
 }
 
 resource "aws_ecs_task_definition" "platform" {
-  count = var.release_version != "" ? 1 : 0
-  family = "platform_${var.env}"
+  count              = var.release_version != "" ? 1 : 0
+  family             = "platform_${var.env}"
   execution_role_arn = "arn:aws:iam::420661028335:role/ecsTaskExecutionRole"
   container_definitions = jsonencode([
     {
@@ -139,7 +139,7 @@ resource "aws_ecs_task_definition" "platform" {
 }
 
 resource "aws_ecs_service" "platform" {
-  count = var.release_version != "" ? 1 : 0
+  count           = var.release_version != "" ? 1 : 0
   name            = "platform_${var.env}"
   cluster         = aws_ecs_cluster.cluster.id
   task_definition = aws_ecs_task_definition.platform[0].arn
