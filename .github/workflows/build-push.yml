@@ -87,16 +87,16 @@ jobs:
 
       - name: Terraform Format
         id: fmt
-        working-directory: "envs/dev/ecs"
+        working-directory: "infra/envs/dev/ecs"
         run: |
           terraform fmt -check -diff -recursive && echo -e "\e[32mterraform fmt succeeded!\e[0m" || (echo -e "\e[31mterraform fmt failed! Install the precommit hooks!\e[0m" && exit 1)
 
       - name: Terraform Init
-        working-directory: "envs/dev/ecs"
+        working-directory: "infra/envs/dev/ecs"
         run: terraform init
 
       - name: Terraform Apply
-        working-directory: "envs/dev/ecs"
+        working-directory: "infra/envs/dev/ecs"
         env:
           TF_IN_AUTOMATION: 1
         run: terraform apply -auto-approve -input=false -compact-warnings
