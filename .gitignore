@@ -3,4 +3,9 @@ dist/
 
 simple-http-server
 
-simple-http-server.yaml
+# Local .terraform directories
+**/.terraform/*
+
+# .tfstate files
+*.tfstate
+*.tfstate.*
