@@ -3,7 +3,10 @@ dist/
 simple-http-server
 
 # Local .terraform directories
-**/.terraform/*
+**/.terraform/**
+
+# TF lock files
+*.terraform.lock.hcl
 
 # .tfstate files
 *.tfstate
