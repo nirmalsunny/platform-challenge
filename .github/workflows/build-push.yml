@@ -68,10 +68,10 @@ jobs:
     name: Deploy Dev Environment
     needs: build-and-push-dev
     outputs:
-      web_endpoint: ${{ steps.apply-dev.outputs.web_endpoint }}
+      WEB_ENDPOINT: ${{ steps.apply-dev.outputs.web_endpoint }}
     environment:
       name: dev
-      url: ${{ needs.deploy-dev.outputs.web_endpoint }}
+      url: ${{ needs.deploy-dev.outputs.WEB_ENDPOINT }}
     runs-on: ubuntu-latest
     steps:
     
@@ -104,7 +104,7 @@ jobs:
           TF_IN_AUTOMATION: 1
         run: |
           terraform apply -auto-approve -input=false -compact-warnings -var="release_version=${{ github.run_id }}"
-          echo "web_endpoint=$(terraform output web_endpoint)" >> $GITHUB_OUTPUT
+          echo WEB_ENDPOINT=$(terraform output web_endpoint) >> $GITHUB_OUTPUT
 
   
   deploy-prod:
