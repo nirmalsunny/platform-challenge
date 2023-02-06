@@ -71,7 +71,7 @@ jobs:
       web_endpoint: ${{ steps.apply-dev.outputs.web_endpoint }}
     environment:
       name: dev
-      url: ${{ steps.apply-dev.outputs.web_endpoint }}
+      url: ${{ needs.deploy-dev.outputs.web_endpoint }}
     runs-on: ubuntu-latest
     steps:
     
@@ -114,7 +114,7 @@ jobs:
       web_endpoint: ${{ steps.apply-prod.outputs.web_endpoint }}
     environment:
       name: prod
-      url: ${{ steps.apply-prod.outputs.web_endpoint }}
+      url: ${{ needs.deploy-prod.outputs.web_endpoint }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
