@@ -12,6 +12,7 @@ jobs:
     name: Build and Push Image - Dev
     runs-on: ubuntu-latest
     steps:
+    
     - name: Check out code
       uses: actions/checkout@v3
     
@@ -25,7 +26,6 @@ jobs:
     - name: Login to Amazon ECR
       id: login-ecr
       uses: aws-actions/amazon-ecr-login@v1
-
 
     - name: Build, tag, and push image to Amazon ECR
       env:
@@ -97,6 +97,43 @@ jobs:
 
       - name: Terraform Apply
         working-directory: "infra/envs/dev/ecs"
+        env:
+          TF_IN_AUTOMATION: 1
+        run: terraform apply -auto-approve -input=false -compact-warnings
+
+  deploy-prod:
+    name: Deploy Production Environment
+    needs: build-and-push-prod
+    environment:
+      name: prod
+      url: "http://platform-lb-prod-700343757.eu-west-2.elb.amazonaws.com"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        id: checkout
+        name: Checkout source code
+
+      - name: Setup AWS credentials
+        run: |
+          mkdir ~/.aws
+          echo -e "[default]\naws_access_key_id=${{ secrets.TF_USER_AWS_KEY }}\naws_secret_access_key=${{ secrets.TF_USER_AWS_SECRET }}\n" >> ~/.aws/credentials
+
+      - uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: ${{ env.TF_VERSION }}
+
+      - name: Terraform Format
+        id: fmt
+        working-directory: "infra/envs/prod/ecs"
+        run: |
+          terraform fmt -check -diff -recursive && echo -e "\e[32mterraform fmt succeeded!\e[0m" || (echo -e "\e[31mterraform fmt failed! Install the precommit hooks!\e[0m" && exit 1)
+
+      - name: Terraform Init
+        working-directory: "infra/envs/prod/ecs"
+        run: terraform init
+
+      - name: Terraform Apply
+        working-directory: "infra/envs/prod/ecs"
         env:
           TF_IN_AUTOMATION: 1
         run: terraform apply -auto-approve -input=false -compact-warnings
