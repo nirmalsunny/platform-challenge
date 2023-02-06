@@ -99,7 +99,7 @@ jobs:
         working-directory: "infra/envs/dev/ecs"
         env:
           TF_IN_AUTOMATION: 1
-        run: terraform apply -auto-approve -input=false -compact-warnings
+        run: terraform apply -auto-approve -input=false -compact-warnings -var="release_version=${{ github.run_id }}"
 
   deploy-prod:
     name: Deploy Production Environment
@@ -136,4 +136,4 @@ jobs:
         working-directory: "infra/envs/prod/ecs"
         env:
           TF_IN_AUTOMATION: 1
-        run: terraform apply -auto-approve -input=false -compact-warnings
+        run: terraform apply -auto-approve -input=false -compact-warnings  -var="release_version=${{ github.run_id }}"
