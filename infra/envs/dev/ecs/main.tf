@@ -162,3 +162,21 @@ resource "aws_ecs_service" "platform_dev" {
     security_groups  = [aws_security_group.ecs_container.id]
   }
 }
+
+terraform {
+  backend "s3" {
+    bucket         = "platform-challenge-terraform-state"
+    key            = "dev/ecs/terraform.tfstate"
+    region         = "eu-west-2"
+    dynamodb_table = "platform-challenge-state-locks"
+    encrypt        = true
+    profile        = "default"
+  }
+  required_providers {
+    aws = {
+      version = "4.53.0"
+      source  = "hashicorp/aws"
+
+    }
+  }
+}

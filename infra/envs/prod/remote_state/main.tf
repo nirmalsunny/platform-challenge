@@ -34,3 +34,13 @@ resource "aws_dynamodb_table" "terraform_locks" {
     type = "S"
   }
 }
+
+terraform {
+  required_providers {
+    aws = {
+      version = "4.53.0"
+      source  = "hashicorp/aws"
+
+    }
+  }
+}
