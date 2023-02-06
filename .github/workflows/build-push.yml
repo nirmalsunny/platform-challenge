@@ -69,9 +69,7 @@ jobs:
     needs: build-and-push-dev
     outputs:
       WEB_ENDPOINT: ${{ steps.apply-dev.outputs.web_endpoint }}
-    environment:
-      name: dev
-      url: ${{ needs.deploy-dev.outputs.WEB_ENDPOINT }}
+    environment: dev
     runs-on: ubuntu-latest
     steps:
     
@@ -104,7 +102,14 @@ jobs:
           TF_IN_AUTOMATION: 1
         run: |
           terraform apply -auto-approve -input=false -compact-warnings -var="release_version=${{ github.run_id }}"
-          echo WEB_ENDPOINT=$(terraform output web_endpoint) >> $GITHUB_OUTPUT
+          echo web_endpoint=$(terraform output web_endpoint) >> $GITHUB_OUTPUT
+    
+  set-env-url-dev:
+    needs: deploy-dev
+    runs-on: ubuntu-latest
+    environment:
+      name: dev
+      url: ${{ needs.deploy-dev.outputs.WEB_ENDPOINT }}
 
   
   deploy-prod:
@@ -112,9 +117,7 @@ jobs:
     needs: build-and-push-prod
     outputs:
       web_endpoint: ${{ steps.apply-prod.outputs.web_endpoint }}
-    environment:
-      name: prod
-      url: ${{ needs.deploy-prod.outputs.web_endpoint }}
+    environment: prod
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -146,5 +149,11 @@ jobs:
           TF_IN_AUTOMATION: 1
         run: |
           terraform apply -auto-approve -input=false -compact-warnings  -var="release_version=${{ github.run_id }}"
-          echo "web_endpoint=$(terraform output web_endpoint)" >> $GITHUB_OUTPUT
- 
+          echo web_endpoint=$(terraform output web_endpoint) >> $GITHUB_OUTPUT
+     
+  set-env-url-prod:
+    needs: deploy-prod
+    runs-on: ubuntu-latest
+    environment:
+      name: prod
+      url: ${{ needs.deploy-prod.outputs.WEB_ENDPOINT }}
