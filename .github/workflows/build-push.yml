@@ -112,7 +112,7 @@ jobs:
       url: ${{ needs.deploy-dev.outputs.WEB_ENDPOINT }}
     steps:
       - name: Show Deployment URL
-        run: echo "${{ needs.deploy-prod.outputs.WEB_ENDPOINT }}"
+        run: echo "${{ needs.deploy-dev.outputs.WEB_ENDPOINT }}"
 
   
   deploy-prod:
