@@ -100,7 +100,13 @@ jobs:
         env:
           TF_IN_AUTOMATION: 1
         run: terraform apply -auto-approve -input=false -compact-warnings -var="release_version=${{ github.run_id }}"
-
+  
+  set-env-url-dev:
+    runs-on: ubuntu-latest
+    environment:
+      name: dev
+      url: ${{ steps.apply-dev.outputs.web_endpoint }}
+  
   deploy-prod:
     name: Deploy Production Environment
     needs: build-and-push-prod
@@ -136,3 +142,9 @@ jobs:
         env:
           TF_IN_AUTOMATION: 1
         run: terraform apply -auto-approve -input=false -compact-warnings  -var="release_version=${{ github.run_id }}"
+ 
+  set-env-url-prod:
+    runs-on: ubuntu-latest
+    environment:
+      name: prod
+      url: ${{ steps.apply-prod.outputs.web_endpoint }}
