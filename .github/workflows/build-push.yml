@@ -84,6 +84,7 @@ jobs:
       - uses: hashicorp/setup-terraform@v2
         with:
           terraform_version: ${{ env.TF_VERSION }}
+          terraform_wrapper: false
 
       - name: Terraform Format
         working-directory: "infra/envs/dev/ecs"
@@ -99,13 +100,9 @@ jobs:
         working-directory: "infra/envs/dev/ecs"
         env:
           TF_IN_AUTOMATION: 1
-        run: terraform apply -auto-approve -input=false -compact-warnings -var="release_version=${{ github.run_id }}"
-  
-  set-env-url-dev:
-    runs-on: ubuntu-latest
-    environment:
-      name: dev
-      url: ${{ steps.apply-dev.outputs.web_endpoint }}
+        run: |
+          terraform apply -auto-approve -input=false -compact-warnings -var="release_version=${{ github.run_id }}"
+          web_endpoint=$(terraform output web_endpoint)
   
   deploy-prod:
     name: Deploy Production Environment
@@ -126,6 +123,7 @@ jobs:
       - uses: hashicorp/setup-terraform@v2
         with:
           terraform_version: ${{ env.TF_VERSION }}
+          terraform_wrapper: false
 
       - name: Terraform Format
         working-directory: "infra/envs/prod/ecs"
@@ -141,10 +139,7 @@ jobs:
         working-directory: "infra/envs/prod/ecs"
         env:
           TF_IN_AUTOMATION: 1
-        run: terraform apply -auto-approve -input=false -compact-warnings  -var="release_version=${{ github.run_id }}"
+        run: |
+          terraform apply -auto-approve -input=false -compact-warnings  -var="release_version=${{ github.run_id }}"
+          web_endpoint=$(terraform output web_endpoint)
  
-  set-env-url-prod:
-    runs-on: ubuntu-latest
-    environment:
-      name: prod
-      url: ${{ steps.apply-prod.outputs.web_endpoint }}
