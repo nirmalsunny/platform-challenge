@@ -67,6 +67,8 @@ jobs:
   deploy-dev:
     name: Deploy Dev Environment
     needs: build-and-push-dev
+    outputs:
+      web_endpoint: ${{ steps.apply-dev.outputs.web_endpoint }}
     environment:
       name: dev
       url: ${{ steps.apply-dev.outputs.web_endpoint }}
@@ -102,11 +104,14 @@ jobs:
           TF_IN_AUTOMATION: 1
         run: |
           terraform apply -auto-approve -input=false -compact-warnings -var="release_version=${{ github.run_id }}"
-          web_endpoint=$(terraform output web_endpoint)
+          echo "web_endpoint=$(terraform output web_endpoint)" >> $GITHUB_OUTPUT
+
   
   deploy-prod:
     name: Deploy Production Environment
     needs: build-and-push-prod
+    outputs:
+      web_endpoint: ${{ steps.apply-prod.outputs.web_endpoint }}
     environment:
       name: prod
       url: ${{ steps.apply-prod.outputs.web_endpoint }}
@@ -141,5 +146,5 @@ jobs:
           TF_IN_AUTOMATION: 1
         run: |
           terraform apply -auto-approve -input=false -compact-warnings  -var="release_version=${{ github.run_id }}"
-          web_endpoint=$(terraform output web_endpoint)
+          echo "web_endpoint=$(terraform output web_endpoint)" >> $GITHUB_OUTPUT
  
