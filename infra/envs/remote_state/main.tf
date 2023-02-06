@@ -35,12 +35,22 @@ resource "aws_dynamodb_table" "terraform_locks" {
   }
 }
 
+provider "aws" {
+  region  = "eu-west-2"
+  profile = "default"
+  default_tags {
+    tags = {
+      Organisation = "Self"
+    }
+  }
+}
+
 terraform {
   required_providers {
     aws = {
       version = "4.53.0"
       source  = "hashicorp/aws"
-
     }
   }
+  required_version = "= 1.3.7"
 }
