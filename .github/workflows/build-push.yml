@@ -110,6 +110,9 @@ jobs:
     environment:
       name: dev
       url: ${{ needs.deploy-dev.outputs.WEB_ENDPOINT }}
+    steps:
+      - name: Show Deployment URL
+        run: echo "${{ needs.deploy-prod.outputs.WEB_ENDPOINT }}"
 
   
   deploy-prod:
@@ -157,3 +160,6 @@ jobs:
     environment:
       name: prod
       url: ${{ needs.deploy-prod.outputs.WEB_ENDPOINT }}
+    steps:
+      - name: Show Deployment URL
+        run: echo "${{ needs.deploy-prod.outputs.WEB_ENDPOINT }}"
