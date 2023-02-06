@@ -69,11 +69,11 @@ jobs:
     needs: build-and-push-dev
     environment:
       name: dev
-      url: "http://platform-lb-dev-205457050.eu-west-2.elb.amazonaws.com"
+      url: ${{ steps.apply-dev.outputs.web_endpoint }}
     runs-on: ubuntu-latest
     steps:
+    
       - uses: actions/checkout@v3
-        id: checkout
         name: Checkout source code
 
       - name: Setup AWS credentials
@@ -86,7 +86,6 @@ jobs:
           terraform_version: ${{ env.TF_VERSION }}
 
       - name: Terraform Format
-        id: fmt
         working-directory: "infra/envs/dev/ecs"
         run: |
           terraform fmt -check -diff -recursive && echo -e "\e[32mterraform fmt succeeded!\e[0m" || (echo -e "\e[31mterraform fmt failed! Install the precommit hooks!\e[0m" && exit 1)
@@ -96,6 +95,7 @@ jobs:
         run: terraform init
 
       - name: Terraform Apply
+        id: apply-dev
         working-directory: "infra/envs/dev/ecs"
         env:
           TF_IN_AUTOMATION: 1
@@ -106,11 +106,10 @@ jobs:
     needs: build-and-push-prod
     environment:
       name: prod
-      url: "http://platform-lb-prod-700343757.eu-west-2.elb.amazonaws.com"
+      url: ${{ steps.apply-prod.outputs.web_endpoint }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-        id: checkout
         name: Checkout source code
 
       - name: Setup AWS credentials
@@ -123,7 +122,6 @@ jobs:
           terraform_version: ${{ env.TF_VERSION }}
 
       - name: Terraform Format
-        id: fmt
         working-directory: "infra/envs/prod/ecs"
         run: |
           terraform fmt -check -diff -recursive && echo -e "\e[32mterraform fmt succeeded!\e[0m" || (echo -e "\e[31mterraform fmt failed! Install the precommit hooks!\e[0m" && exit 1)
@@ -133,6 +131,7 @@ jobs:
         run: terraform init
 
       - name: Terraform Apply
+        id: apply-prod
         working-directory: "infra/envs/prod/ecs"
         env:
           TF_IN_AUTOMATION: 1
